@@ -1,0 +1,6 @@
+<h2>My Parties</h2>
+<ul class="parties">
+  <li *ngFor="let party of parties">
+    <span (click)="onSelectParty(party.name)">{{party.name}}</span>
+  </li>
+</ul>
