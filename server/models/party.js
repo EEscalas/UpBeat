@@ -4,12 +4,11 @@ var Schema = mongoose.Schema;
 
 // create the schema
 var PartySchema = new mongoose.Schema({
-  id: {type: Integer},
+  id: {type: Number},
   name: {type: String},
-  owner: {type: String},
+  djid: {type: Number},
   password: {type: String},
-  songs: [],
 },{timestamp: true})
-// register the schema as a model
 
+// register the schema as a model
 var Party = mongoose.model('Party', PartySchema);

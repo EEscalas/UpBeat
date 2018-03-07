@@ -9,7 +9,7 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // static content 
-var ngName = "";
+var ngName = "upbeat-front-end";
 app.use(express.static(path.join(__dirname, "./"+ngName+"/dist")));
 // setting up ejs and our views folder
 app.set('views', path.join(__dirname, './client/views'));

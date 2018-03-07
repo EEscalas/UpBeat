@@ -1,0 +1,29 @@
+{
+  "name": "UpBeat",
+  "version": "1.0.0",
+  "description": "CS M117 project. Web Application: \"DJ Reddit\" Reading it",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EEscalas/UpBeat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EEscalas/UpBeat/issues"
+  },
+  "homepage": "https://github.com/EEscalas/UpBeat#readme"
+}

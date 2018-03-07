@@ -5,7 +5,7 @@ var fs = require('fs');
 // require path for getting the models path
 var path = require('path');
 // connect to mongoose!
-var dbName = "";
+var dbName = "upbeatDB";
 mongoose.connect('mongodb://localhost/' + dbName);
 // create a variable that points to the path where all of the models live
 var models_path = path.join(__dirname, './../models');
