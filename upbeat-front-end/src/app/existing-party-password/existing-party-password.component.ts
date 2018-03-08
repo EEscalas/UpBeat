@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
+
 import {ActivatedRoute, Router} from '@angular/router'
-=======
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
->>>>>>> e474e020eafbe93a76e37e1703a0c5f7edb1b10c
 
 @Component({
   selector: 'app-existing-party-password',
@@ -14,21 +10,12 @@ import { ActivatedRoute } from '@angular/router';
 
 export class ExistingPartyPasswordComponent implements OnInit {
 
-<<<<<<< HEAD
   constructor(private route:ActivatedRoute, private router:Router) { }
   partyName: string;
   partyid: number;
   ngOnInit() {
   	this.partyName = this.route.snapshot.paramMap.get('name');
   	this.partyid = +this.route.snapshot.paramMap.get('id');
-=======
-  constructor(private route: ActivatedRoute) { }
-
-  partyName: string;
-
-  ngOnInit() {
-    this.partyName = this.route.snapshot.paramMap.get('name');
->>>>>>> e474e020eafbe93a76e37e1703a0c5f7edb1b10c
   }
   onSelectButton(name,id):void{
   	//check password
