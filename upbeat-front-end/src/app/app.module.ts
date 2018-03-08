@@ -10,7 +10,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { ExistingPartyPasswordComponent } from './existing-party-password/existing-party-password.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { CreatePartyComponent } from './create-party/create-party.component';
-import { DjPlaylistComponent } from './dj-playlist/dj-playlist.component';
+
 
 @NgModule({
   declarations: [
@@ -19,8 +19,7 @@ import { DjPlaylistComponent } from './dj-playlist/dj-playlist.component';
     PartyListComponent,
     ExistingPartyPasswordComponent,
     PlaylistComponent,
-    CreatePartyComponent,
-    DjPlaylistComponent
+    CreatePartyComponent
   ],
   imports: [
     BrowserModule,

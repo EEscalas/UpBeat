@@ -9,6 +9,7 @@
 <h2>{{partyName}}</h2>
 <ul class="songs">
   <li *ngFor="let song of songs">
+    <div class="song-details"><button *ngIf="isDj" (click)="onSelectDelete(song)">x</button></div>
   	<div class="song-details"> {{song.name}} by {{song.artist}} </div>
     <div class="song-details">{{song.upcount}}
     	<button (click)="onSelectUpVote(song)">^</button>
