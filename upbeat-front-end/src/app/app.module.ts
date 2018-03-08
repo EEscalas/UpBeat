@@ -9,12 +9,18 @@ import { HomeComponent } from './home/home.component';
 import { PartyListComponent } from './party-list/party-list.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ExistingPartyPasswordComponent } from './existing-party-password/existing-party-password.component';
+import { PlaylistComponent } from './playlist/playlist.component';
+import { CreatePartyComponent } from './create-party/create-party.component';
+import { DjPlaylistComponent } from './dj-playlist/dj-playlist.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     PartyListComponent,
-    ExistingPartyPasswordComponent
+    ExistingPartyPasswordComponent,
+    PlaylistComponent,
+    CreatePartyComponent,
+    DjPlaylistComponent
   ],
   imports: [
     BrowserModule,

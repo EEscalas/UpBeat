@@ -1,0 +1,18 @@
+<style>
+	.song-details{
+		display:inline-block;
+	}
+	ul{
+		list-style: none;
+	}
+</style>
+<h2>{{partyName}}</h2>
+<ul class="songs">
+  <li *ngFor="let song of songs">
+  	<div class="song-details"> {{song.name}} by {{song.artist}} </div>
+    <div class="song-details">{{song.upcount}}
+    	<button (click)="onSelectUpVote(song)">^</button>
+    	<button (click)="onSelectDownVote(song)">v</button>
+    </div>
+  </li>
+</ul>
