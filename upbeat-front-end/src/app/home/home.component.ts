@@ -14,6 +14,10 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl('/guest');
   }
 
+  onSelectDj() : void {
+    this.router.navigateByUrl('/dj/login');
+  }
+
   ngOnInit() {
   }
 
