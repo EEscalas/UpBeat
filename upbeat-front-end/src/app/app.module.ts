@@ -9,12 +9,14 @@ import { HomeComponent } from './home/home.component';
 import { PartyListComponent } from './party-list/party-list.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ExistingPartyPasswordComponent } from './existing-party-password/existing-party-password.component';
+import { DjLoginComponent } from './dj-login/dj-login.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     PartyListComponent,
-    ExistingPartyPasswordComponent
+    ExistingPartyPasswordComponent,
+    DjLoginComponent
   ],
   imports: [
     BrowserModule,
