@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
- import { Party, PARTIES } from '../parties';
+ import { Party} from '../parties';
 //import { Party } from '../parties';
+import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,16 +11,18 @@ import { Router } from '@angular/router';
 })
 export class PartyListComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private apiService:ApiService ,private router: Router) {}
 
-  //parties = [];
-   parties = PARTIES;
+   parties: Party[] = [];
+
 
   onSelectParty(name:string, id:number) : void {
     this.router.navigateByUrl('/guest/' + name + '/' + id + '/password');
   }
 
   ngOnInit() {
+    this.parties = this.apiService.getParties();
+    console.log(this.parties);
   }
 
 }

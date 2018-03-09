@@ -11,6 +11,7 @@ import { ExistingPartyPasswordComponent } from './existing-party-password/existi
 import { PlaylistComponent } from './playlist/playlist.component';
 import { CreatePartyComponent } from './create-party/create-party.component';
 import { DjPlaylistComponent } from './dj-playlist/dj-playlist.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DjPlaylistComponent } from './dj-playlist/dj-playlist.component';
     ExistingPartyPasswordComponent,
     PlaylistComponent,
     CreatePartyComponent,
-    DjPlaylistComponent
+    DjPlaylistComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
