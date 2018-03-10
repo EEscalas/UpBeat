@@ -8,16 +8,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 
-// export class Party {
-//     constructor(
-//         public id: number = null,
-//         public name: string = ""//,
-//         //public password: string = ""
-//     ){}
-// }
-
-
-
 @Injectable()
 export class ApiService {
 
