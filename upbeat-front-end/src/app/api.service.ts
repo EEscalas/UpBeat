@@ -35,7 +35,7 @@ export class ApiService {
     getParties(): Party[] { return this.parties; }
 
 
-    createParty(name: string, password: string): Party
+    createParty(name: string, password: string, key: string): Party
     {
       for(var i=0;i<this.parties.length;i++) {
           if(this.parties[i].name == name)
@@ -45,6 +45,7 @@ export class ApiService {
       this.maxPartyId++;
       var temp: Party = new Party();
       temp.name = name;
+      temp.accessKey = key;
       temp.id = this.maxPartyId; 
       temp.password = password;
       this.parties.push(temp);

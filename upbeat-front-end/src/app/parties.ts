@@ -2,8 +2,8 @@ export class Party {
     constructor(
         public id: number = null,
         public name: string = "",
-        public password: string = ""//,
-        //public password: string = ""
+        public accessKey: string = "",
+        public password: string = ""
     ){}
 }
 

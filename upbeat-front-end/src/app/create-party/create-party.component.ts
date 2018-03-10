@@ -18,23 +18,26 @@ export class CreatePartyComponent implements OnInit {
   //party:Party;
   partyName: string;
   partyPassword:string;
+  partyAccessKey: string;
   
   onSelectCreate(){
   	//assign name to party
   	this.partyName = (<HTMLInputElement>document.getElementById("partyName")).value;
   	// put party into database
   	this.partyPassword = (<HTMLInputElement>document.getElementById("password")).value;
+    this.partyAccessKey = (<HTMLInputElement>document.getElementById("accessKey")).value;
 
     console.log(this.partyName); 
     console.log(this.partyPassword);
+    console.log(this.partyAccessKey);
     var temp:Party = new Party();
     
-    temp = this.apiService.createParty(this.partyName, this.partyPassword);
+    temp = this.apiService.createParty(this.partyName, this.partyPassword, this.partyAccessKey);
 
-    console.log(this.apiService.getParties()) 
-
+    console.log(this.apiService.getParties()); 
+   
     if(temp != null)
-  	this.router.navigateByUrl('/dj/' + this.partyName + '/' + temp.id);
+      this.router.navigateByUrl('/dj/' + this.partyName + '/' + temp.id);
   }
 
 }
