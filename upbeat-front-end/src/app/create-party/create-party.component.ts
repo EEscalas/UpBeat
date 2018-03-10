@@ -29,10 +29,12 @@ export class CreatePartyComponent implements OnInit {
     console.log(this.partyPassword);
     var temp:Party = new Party();
     
-    this.apiService.createParty(this.partyName, this.partyPassword);
+    temp = this.apiService.createParty(this.partyName, this.partyPassword);
 
-    console.log(this.apiService.getParties()); 
-  	this.router.navigateByUrl('/guest');//'
+    console.log(this.apiService.getParties()) 
+
+    if(temp != null)
+  	this.router.navigateByUrl('/dj/' + this.partyName + '/' + temp.id);
   }
 
 }

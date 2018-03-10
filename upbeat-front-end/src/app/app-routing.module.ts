@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'guest/:name/:id/password', component: ExistingPartyPasswordComponent },
   { path: 'guest/:name/:id', component: PlaylistComponent },
   { path: 'dj', component: CreatePartyComponent },
-  { path: 'dj/:name', component: PlaylistComponent}
+  { path: 'dj/:name/:id', component: PlaylistComponent}
 ]
 
 @NgModule({
