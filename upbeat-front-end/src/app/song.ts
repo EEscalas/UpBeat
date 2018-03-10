@@ -7,7 +7,7 @@ export class Song {
     ) {}
 }
 export const SONGS: Song[] =[
-    { name: "Hey", artist: "him", partyid: 1, upcount:0 },
-    { name: "LIT", artist: "her", partyid: 1, upcount:0 },
-    { name: "Fire", artist: "they", partyid: 1, upcount:0 }
+    { name: "Hey", artist: "him", partyid: 1, upcount: 0},
+    { name: "LIT", artist: "her", partyid: 1, upcount:5 },
+    { name: "Fire", artist: "they", partyid: 1, upcount:2 }
 ]
