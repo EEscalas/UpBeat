@@ -58,9 +58,21 @@ export class PlaylistComponent implements OnInit {
     this.tempArtist = (<HTMLInputElement>document.getElementById("artist")).value;
     this.tempSong = (<HTMLInputElement>document.getElementById("song")).value;
     
+    // make sure song isn't a duplicate
+
     this.songs.push({ name: this.tempSong, artist: this.tempArtist, partyid: this.partyid, upcount:0 });
    }
 
+  onSelectDelete(song: Song): void {
+    for (let i = 0; i < this.songs.length; i++)
+    {
+      if (song.partyid == this.partyid && this.songs[i].name == song.name && this.songs[i].artist == song.artist)
+      {
+        this.songs.splice(i, 1);
+        break;
+      }
+    }
+  }
 
   onSelectUpVote(song:Song) :void {
 
