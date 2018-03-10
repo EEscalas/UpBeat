@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Song, SONGS} from '../song';
 import {SongService} from '../song.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import { ApiService } from '../api.service';
+import { Party } from '../parties';
 
 @Component({
   selector: 'app-playlist',
@@ -11,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 export class PlaylistComponent implements OnInit {
 
-  constructor(private route:ActivatedRoute, private router:Router, private songService: SongService) { }
+  constructor(private route:ActivatedRoute, private router:Router, private songService: SongService, private apiService: ApiService) { }
   partyName :string;
   partyid :number;
   //use partyid to get songs
@@ -21,11 +23,21 @@ export class PlaylistComponent implements OnInit {
   url: string;
   tempArtist: string;
   tempSong: string;
+  accessKey: string;
+  existingParties: Party[] = this.apiService.getParties();
 
   ngOnInit() {
 
     this.partyName = this.route.snapshot.paramMap.get('name');
     this.partyid = +this.route.snapshot.paramMap.get('id');
+
+    for (let i = 0; i < this.existingParties.length; i++) // need to modify to use getParties from api.service.ts
+    {
+      if (this.existingParties[i].id == this.partyid && this.existingParties[i].name == this.partyName)
+      {
+        this.accessKey = this.existingParties[i].accessKey;
+      }
+    }
 
 
     // this.songs = SONGS;
