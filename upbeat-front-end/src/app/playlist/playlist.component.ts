@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Song, SONGS} from '../song';
+import {SongService} from '../song.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -10,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 export class PlaylistComponent implements OnInit {
 
-  constructor(private route:ActivatedRoute, private router:Router) { }
+  constructor(private route:ActivatedRoute, private router:Router, private songService: SongService) { }
   partyName :string;
   partyid :number;
   //use partyid to get songs
@@ -29,11 +30,7 @@ export class PlaylistComponent implements OnInit {
 
     // this.songs = SONGS;
 
-    for(var i=0;i<SONGS.length;i++)
-    {
-       if(SONGS[i].partyid == this.partyid)
-         this.songs.push(SONGS[i]);
-    }
+    this.songs = this.songService.getSongs(this.partyid);
 
     this.songs = this.songs.sort((obj1:Song, obj2:Song) => {
     if(obj1.upcount > obj2.upcount){

@@ -1,4 +1,5 @@
 import { ApiService } from './api.service';
+import {SongService} from './song.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +31,7 @@ import { ListComponent } from './list/list.component';
     HttpModule,
     FormsModule
   ],
-  providers: [ApiService],
+  providers: [ApiService, SongService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
