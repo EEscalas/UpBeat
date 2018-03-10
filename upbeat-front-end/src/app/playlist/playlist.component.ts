@@ -34,11 +34,26 @@ export class PlaylistComponent implements OnInit {
   partyid :number;
   //use partyid to get songs
   //songs = SONGS;
-  songs : Song[];
+  songs : Song[] = [];
   isDj: boolean = false;
   url: string;
+
+
   ngOnInit() {
-    this.songs = SONGS;
+
+    this.partyName = this.route.snapshot.paramMap.get('name');
+    this.partyid = +this.route.snapshot.paramMap.get('id');
+
+
+    // this.songs = SONGS;
+
+    for(var i=0;i<SONGS.length;i++)
+    {
+       if(SONGS[i].partyid == this.partyid)
+         this.songs.push(SONGS[i]);
+    }
+
+
     this.songs = this.songs.sort((obj1:Song, obj2:Song) => {
     if(obj1.upcount > obj2.upcount){
       return -1;
@@ -49,8 +64,7 @@ export class PlaylistComponent implements OnInit {
     return 0;
   });
 
-    this.partyName = this.route.snapshot.paramMap.get('name');
-  	this.partyid = +this.route.snapshot.paramMap.get('id');
+    
     //this.songs.OrderBy(x=>x.upcount);
     this.url = this.router.url;
     if(this.url[1] == 'd')
@@ -58,6 +72,8 @@ export class PlaylistComponent implements OnInit {
     else
         this.isDj = false;
   }
+
+
   onSelectUpVote(song:Song) :void {
   	song.upcount++;
     this.songs.sort((obj1:Song, obj2:Song) => {
