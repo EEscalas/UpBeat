@@ -8,25 +8,6 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./playlist.component.css']
 })
 
-// @Pipe({
-//   name:"sort"
-// })
-
-
-
-// export class SortPipe implements PipeTransform {
-//   transform(array: this.songs): Array<Song> {
-//     array.sort((a: any, b: any) => {
-//       if (a.upcount < b. upcount) {
-//         return -1;
-//       } else if (a.upcount > b.upcount) {
-//         return 1;
-//       } else return 0;
-//     }
-//     return array;
-//   }
-// }
-
 export class PlaylistComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private router:Router) { }
@@ -37,7 +18,8 @@ export class PlaylistComponent implements OnInit {
   songs : Song[] = [];
   isDj: boolean = false;
   url: string;
-
+  tempArtist: string;
+  tempSong: string;
 
   ngOnInit() {
 
@@ -52,7 +34,6 @@ export class PlaylistComponent implements OnInit {
        if(SONGS[i].partyid == this.partyid)
          this.songs.push(SONGS[i]);
     }
-
 
     this.songs = this.songs.sort((obj1:Song, obj2:Song) => {
     if(obj1.upcount > obj2.upcount){
@@ -73,9 +54,17 @@ export class PlaylistComponent implements OnInit {
         this.isDj = false;
   }
 
+  onAddSong() :void {
+    this.tempArtist = (<HTMLInputElement>document.getElementById("artist")).value;
+    this.tempSong = (<HTMLInputElement>document.getElementById("song")).value;
+    
+    this.songs.push({ name: this.tempSong, artist: this.tempArtist, partyid: this.partyid, upcount:0 });
+   }
+
 
   onSelectUpVote(song:Song) :void {
-  	song.upcount++;
+
+    song.upcount++;
     this.songs.sort((obj1:Song, obj2:Song) => {
     if(obj1.upcount > obj2.upcount){
       return -1;
