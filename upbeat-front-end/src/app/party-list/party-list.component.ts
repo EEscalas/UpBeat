@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
- import { Party} from '../parties';
-//import { Party } from '../parties';
-import { ApiService } from '../api.service';
+import { Party } from '../parties';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-party-list',
@@ -11,18 +10,21 @@ import { Router } from '@angular/router';
 })
 export class PartyListComponent implements OnInit {
 
-  constructor(private apiService:ApiService ,private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) { }
 
-   parties: Party[] = [];
+  parties = this.apiService.getParties();
 
-
-  onSelectParty(name:string, id:number) : void {
+  onSelectParty(name) : void {
+    var id: number;
+    for (let i = 0; i < this.parties.length; i++)
+    {
+      if (this.parties[i].name == name)
+        id = this.parties[i].id;
+    }
     this.router.navigateByUrl('/guest/' + name + '/' + id + '/password');
   }
 
   ngOnInit() {
-    this.parties = this.apiService.getParties();
-    console.log(this.parties);
   }
 
 }

@@ -39,7 +39,7 @@ export class ExistingPartyPasswordComponent implements OnInit {
     	this.router.navigateByUrl('/guest/' + name + '/' + id );
   	}
   	else{
-  		alert("Invalid Password, please try again.");
+  		alert("Invalid Party Access Key, please try again.");
   	}
   }
   

@@ -19,6 +19,7 @@ export class CreatePartyComponent implements OnInit {
   partyName: string;
   partyPassword:string;
   partyAccessKey: string;
+  existingParties: Party[] = this.apiService.getParties();
   
   onSelectCreate(){
   	//assign name to party
@@ -38,6 +39,25 @@ export class CreatePartyComponent implements OnInit {
    
     if(temp != null)
       this.router.navigateByUrl('/dj/' + this.partyName + '/' + temp.id);
+  }
+
+  onSelectView(){
+    this.partyName = (<HTMLInputElement>document.getElementById("existingPartyName")).value;
+    this.partyPassword = (<HTMLInputElement>document.getElementById("existingPartyPassword")).value;
+    var partyExists: boolean = false;
+    for (let i = 0; i < this.existingParties.length; i++)
+    {
+      if (this.existingParties[i].name == this.partyName)
+      {
+        partyExists = true;
+        if (this.existingParties[i].password == this.partyPassword)
+          this.router.navigateByUrl('/dj/' + this.partyName + '/' + this.existingParties[i].id);
+        else
+          alert("Invalid Party Password, please try again.");
+      }
+    }
+    if (!partyExists)
+      alert("This party does not exist, please create a new party.");
   }
 
 }
