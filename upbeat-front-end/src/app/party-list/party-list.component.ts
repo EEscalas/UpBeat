@@ -14,13 +14,7 @@ export class PartyListComponent implements OnInit {
 
   parties = this.apiService.getParties();
 
-  onSelectParty(name) : void {
-    var id: number;
-    for (let i = 0; i < this.parties.length; i++)
-    {
-      if (this.parties[i].name == name)
-        id = this.parties[i].id;
-    }
+  onSelectParty(name, id) : void {
     this.router.navigateByUrl('/guest/' + name + '/' + id + '/password');
   }
 
