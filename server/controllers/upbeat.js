@@ -94,31 +94,39 @@ module.exports = {
 
   upvoteSong: function(req, res){
     Song.findOne({partyid: req.params.partyid, name:req.params.name, artist: req.params.artist}, function(err, song){
-      console.log(song);
-      console.log(song.upcount);
-      song.upcount = song.upcount+1;
-      console.log(song.upcount);
-      song.save(function(err){
-        if(err)
-          res.json(err);
-        else{
-          console.log(song);
-          res.json(true);
-        }
-      })
+      if(song == null)
+        res.json(false);
+      else{
+        console.log(song);
+        console.log(song.upcount);
+        song.upcount = song.upcount+1;
+        console.log(song.upcount);
+        song.save(function(err){
+          if(err)
+            res.json(err);
+          else{
+            console.log(song);
+            res.json(true);
+          }
+        })
+      }
     })
   },
 
 
   downvoteSong: function(req, res){
     Song.findOne({partyid: req.params.partyid, name:req.params.name, artist: req.params.artist}, function(err, song){
-      song.upcount = song.upcount - 1;
-      song.save(function(err){
-        if(err)
-          res.json(err);
-        else
-          res.json(true);
-      })
+      if(song == null)
+        res.json(false);
+      else{
+        song.upcount = song.upcount - 1;
+        song.save(function(err){
+          if(err)
+            res.json(err);
+          else
+            res.json(true);
+        })
+      }
     })
   },
 
