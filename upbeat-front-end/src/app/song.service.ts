@@ -2,24 +2,32 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Song, SONGS } from './song';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
 export class SongService {
-  songs: Song[] = [];
+//   songs: Song[] = [];
 
-  constructor() { 
-  	this.songs = SONGS;
+  constructor(private _http:Http) { 
   }
 
-  getSongs(id:number): Song[] { 
+  getSongs(partyid: number){
+    return this._http.get('/'+partyid+'/songs').map(data=>data.json()).toPromise();
+  }
 
-  	var temp:Song[] = [];
+  addSong(song: Song){
+	  return this._http.post('/songs/add', song).map(data=>data.json()).toPromise();
+  }
 
-  	for(var i=0;i<this.songs.length;i++) { 
-  		if(id==SONGS[i].partyid)
-  			temp.push(SONGS[i]);
-  	}
+  deleteSong(song: Song){
+    return this._http.get('songs/delete/'+song.partyid+'/'+song.name+'/'+song.artist).map(data=>data.json()).toPromise();
+  }
 
-  	return temp;
-	}
+  upvoteSong(song: Song){
+    return this._http.get('songs/upvote/'+song.partyid+'/'+song.name+'/'+song.artist).map(data=>data.json()).toPromise();
+  }
+
+  downvoteSong(song: Song){
+    return this._http.get('songs/downvote/'+song.partyid+'/'+song.name+'/'+song.artist).map(data=>data.json()).toPromise();
+  }
 }

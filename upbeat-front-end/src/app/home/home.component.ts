@@ -10,6 +10,8 @@ import { User } from './../user';
 export class HomeComponent implements OnInit {
   constructor(private router: Router, private apiService: ApiService) { }
 
+  people = [];
+
   onSelectGuest() : void {
     this.router.navigateByUrl('/guest');
   }
@@ -18,6 +20,7 @@ export class HomeComponent implements OnInit {
   	this.router.navigateByUrl('/dj');
   }
   ngOnInit() {
+
   }
 
 

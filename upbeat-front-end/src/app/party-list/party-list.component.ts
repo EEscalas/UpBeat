@@ -12,13 +12,21 @@ export class PartyListComponent implements OnInit {
 
   constructor(private router: Router, private apiService: ApiService) { }
 
-  parties = this.apiService.getParties();
+  parties;
 
+  getParties(){
+    this.apiService.getParties().then(result=> {
+      this.parties = result;
+    })
+  }
   onSelectParty(name, id) : void {
+    console.log(id);
+    console.log(name);
     this.router.navigateByUrl('/guest/' + name + '/' + id + '/password');
   }
 
   ngOnInit() {
+    this.getParties();
   }
 
 }

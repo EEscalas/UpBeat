@@ -8,6 +8,10 @@ module.exports = function(app) {
   app.post('/party/create', upbeat.createParty);
   app.get('/party/:partyid/delete', upbeat.deleteParty);
   app.get('/:partyid/songs', upbeat.getPartySongs);
+  app.post('/songs/add', upbeat.addSong);
+  app.get('/songs/delete/:partyid/:name/:artist', upbeat.deleteSong);
+  app.get('/songs/upvote/:partyid/:name/:artist', upbeat.upvoteSong);
+  app.get('/songs/downvote/:partyid/:name/:artist', upbeat.downvoteSong);
   // app.get('/:partyid/people', upbeat.getPartyPeople);
   app.all("*", (req,res,next) => {
     var ngName = "upbeat-front-end";

@@ -12,39 +12,59 @@ export class CreatePartyComponent implements OnInit {
 
   constructor(private router:Router, private apiService: ApiService) { }
 
-  ngOnInit() {
-  }
-  //make a party
-  //party:Party;
+  // Initialize variables
   partyName: string;
   partyPassword:string;
   partyAccessKey: string;
-  existingParties: Party[] = this.apiService.getParties();
-  
+  existingParties: Party[];
+  temp: Party;
+
+  ngOnInit() {
+    // Initialize parties
+    this.getParties();
+  }
+
+  getParties(){
+    this.apiService.getParties().then(result=> {
+      this.existingParties = result;
+    })
+  }
+
+  // Create party
   onSelectCreate(){
-  	//assign name to party
+    // Get party information
   	this.partyName = (<HTMLInputElement>document.getElementById("partyName")).value;
-  	// put party into database
   	this.partyPassword = (<HTMLInputElement>document.getElementById("password")).value;
     this.partyAccessKey = (<HTMLInputElement>document.getElementById("accessKey")).value;
 
-    console.log(this.partyName); 
-    console.log(this.partyPassword);
-    console.log(this.partyAccessKey);
-    var temp:Party = new Party();
-    
-    temp = this.apiService.createParty(this.partyName, this.partyPassword, this.partyAccessKey);
+    // Create party object
+    this.temp = new Party();
+    this.temp.name = this.partyName;
+    this.temp.password = this.partyPassword;
+    this.temp.accessKey = this.partyAccessKey;
 
-    console.log(this.apiService.getParties()); 
-   
-    if(temp != null)
-      this.router.navigateByUrl('/dj/' + this.partyName + '/' + temp.id);
+    // Use apiService to create party in database
+    this.apiService.createParty(this.temp).then(result => {
+      if(result != 'err')
+      {
+        this.router.navigateByUrl('/dj/' + this.partyName + '/' + result.id);
+      }
+      else
+        console.log('err');
+    });
+
   }
 
   onSelectView(){
+    // Update party list
+    this.getParties();
+
+    // Get party information
     this.partyName = (<HTMLInputElement>document.getElementById("existingPartyName")).value;
     this.partyPassword = (<HTMLInputElement>document.getElementById("existingPartyPassword")).value;
     var partyExists: boolean = false;
+
+    // Look for party in existing parties list
     for (let i = 0; i < this.existingParties.length; i++)
     {
       if (this.existingParties[i].name == this.partyName)

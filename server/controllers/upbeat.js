@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Party = mongoose.model('Party');
 var User = mongoose.model('User');
+var Song = mongoose.model('Song');
 module.exports = {
   index: function(req, res) {
     res.render('index');
@@ -24,7 +25,10 @@ module.exports = {
 
   getPartySongs: function(req, res){
     Song.find({partyid: req.params.partyid}, function(err, songs){
-      res.json(songs);
+      if(err)
+        res.json('err');
+      else
+        res.json(songs);
     })
   },
 
@@ -37,14 +41,17 @@ module.exports = {
           id = parties[0].id+1;
 
         req.body.id = id;
-        req.body.djid = req.session.currentUser;
 
+        console.log('req');
+        console.log(req.body);
         newParty = new Party(req.body);
+        console.log('new');
+        console.log(newParty);
         newParty.save(function(err){
           if(err)
-            res.json(err);
+            res.json('err');
           else
-            res.json(true);
+            res.json(newParty);
         })
         
       })
@@ -62,6 +69,56 @@ module.exports = {
               res.json(true);
           })
         }
+    })
+  },
+
+  addSong: function(req, res){
+    newSong = Song(req.body);
+    newSong.save(function(err){
+      if(err)
+        res.json(err);
+      else
+        res.json(true);
+    })
+  },
+
+  deleteSong: function(req, res){
+    Song.remove({partyid: req.params.partyid, name: req.params.name, artist: req.params.artist}, function(err){
+      if(err)
+        res.json(err);
+      else{
+        res.json(true);
+      }
+    })
+  },
+
+  upvoteSong: function(req, res){
+    Song.findOne({partyid: req.params.partyid, name:req.params.name, artist: req.params.artist}, function(err, song){
+      console.log(song);
+      console.log(song.upcount);
+      song.upcount = song.upcount+1;
+      console.log(song.upcount);
+      song.save(function(err){
+        if(err)
+          res.json(err);
+        else{
+          console.log(song);
+          res.json(true);
+        }
+      })
+    })
+  },
+
+
+  downvoteSong: function(req, res){
+    Song.findOne({partyid: req.params.partyid, name:req.params.name, artist: req.params.artist}, function(err, song){
+      song.upcount = song.upcount - 1;
+      song.save(function(err){
+        if(err)
+          res.json(err);
+        else
+          res.json(true);
+      })
     })
   },
 

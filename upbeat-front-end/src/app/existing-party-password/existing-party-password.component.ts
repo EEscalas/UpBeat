@@ -12,26 +12,37 @@ import { Party } from '../parties';
 export class ExistingPartyPasswordComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private router:Router, private apiService: ApiService) { }
+  // Initialize Variables
   partyName: string;
   partyid: number;
   partyAccessKey: string;
-  existingParties: Party[] = this.apiService.getParties();
+  existingParties: Party[];
+
+  // Get list of parties in database and get party information
+  getParties(){
+    this.apiService.getParties().then(result=> {
+      this.existingParties = result;
+      this.partyName = this.route.snapshot.paramMap.get('name');
+      this.partyid = +this.route.snapshot.paramMap.get('id');
+
+      for (let i = 0; i < this.existingParties.length; i++) // need to modify to use getParties from api.service.ts
+      {
+        if (this.existingParties[i].id == this.partyid && this.existingParties[i].name == this.partyName)
+        {
+          this.partyAccessKey = this.existingParties[i].accessKey;
+        }
+      }
+    })
+  }
 
   ngOnInit() {
-  	this.partyName = this.route.snapshot.paramMap.get('name');
-    this.partyid = +this.route.snapshot.paramMap.get('id');
-    
-    for (let i = 0; i < this.existingParties.length; i++) // need to modify to use getParties from api.service.ts
-    {
-      if (this.existingParties[i].id == this.partyid && this.existingParties[i].name == this.partyName)
-      {
-        this.partyAccessKey = this.existingParties[i].accessKey;
-      }
-    }
+    this.getParties();
   }
+
   onSelectButton(name,id):void{
   	//check password
     let passCheck :boolean = false;
+    console.log(this.partyAccessKey);
     if((<HTMLInputElement>document.getElementById("accessKey")).value == this.partyAccessKey){
       passCheck = true;
     }
