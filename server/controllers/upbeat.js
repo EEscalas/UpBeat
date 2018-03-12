@@ -130,28 +130,28 @@ module.exports = {
     })
   },
 
-  register: function(req, res){
-    // TODO: Hash password using bcrypt
-      var user = new User(req.body);
-      user.save(function(err){
-        if(err == null){
-          req.session.currentUser = user;
-          res.json(true);
-        }
-        else
-          res.json(err);
-      })
-  },
+  // register: function(req, res){
+  //   // TODO: Hash password using bcrypt
+  //     var user = new User(req.body);
+  //     user.save(function(err){
+  //       if(err == null){
+  //         req.session.currentUser = user;
+  //         res.json(true);
+  //       }
+  //       else
+  //         res.json(err);
+  //     })
+  // },
 
-  login: function(req, res){
-      User.findOne({name: req.body.name}, function(err, user){
-        // TODO: Use bcrypt for hashed password
-        if(req.body.password != user.password)
-          res.json(false);
-        else{
-          req.session.currentUser = user;
-          res.json(true);
-        }
-      })
-  }
+  // login: function(req, res){
+  //     User.findOne({name: req.body.name}, function(err, user){
+  //       // TODO: Use bcrypt for hashed password
+  //       if(req.body.password != user.password)
+  //         res.json(false);
+  //       else{
+  //         req.session.currentUser = user;
+  //         res.json(true);
+  //       }
+  //     })
+  // }
 }

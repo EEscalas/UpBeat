@@ -25,6 +25,7 @@ export class PlaylistComponent implements OnInit {
   existingParties: Party[];
   uniqueSong: boolean;
   emptySong: boolean;
+  checkVoted;
   // Use apiService to get parties and initialize party information
   getParties(){
     this.apiService.getParties().then(result=> {
@@ -48,7 +49,21 @@ export class PlaylistComponent implements OnInit {
   getSongs(partyid: number){
     this.songService.getSongs(partyid).then(result=>{
       this.songs = result;
-  
+      console.log("BOOO");
+      console.log(result);
+      for(let i = 0; i < result.length; i++){
+        if(this.checkVoted[result[i].artist] == undefined){
+          this.checkVoted[result[i].artist] = {};
+          this.checkVoted[result[i].artist][result[i].name] = false;
+        }
+        else if(this.checkVoted[result[i].artist][result[i].name] == undefined){
+          this.checkVoted[result[i].artist][result[i].name] = false;
+        }
+      }
+
+      console.log("AHHHHH");
+
+      console.log(this.checkVoted);
       // Sort songs by number of upcounts
       this.songs.sort((obj1:Song, obj2:Song) => {
         if(obj1.upcount > obj2.upcount){
@@ -64,6 +79,7 @@ export class PlaylistComponent implements OnInit {
   
   // Initialize parties list and dj status
   ngOnInit() {
+    this.checkVoted = {};
     this.tempSong = new Song();
     this.uniqueSong = false;
     this.emptySong = false;
@@ -75,6 +91,9 @@ export class PlaylistComponent implements OnInit {
         this.isDj = false;
   }
 
+  // checkClicked(artist: string, name: string){
+  //   return this.checkVoted[artist][name];
+  // }
   // Delete songs
   deleteParty(){
     this.apiService.deleteParty(this.partyid).then(result=>{
@@ -146,6 +165,7 @@ export class PlaylistComponent implements OnInit {
   // Upvote
   onSelectUpVote(song:Song) :void {
     var self = this;
+    this.checkVoted[song.artist][song.name] = true;
     this.songService.upvoteSong(song).then(result=>{
       // Update song list
       self.getSongs(self.partyid);
@@ -155,6 +175,7 @@ export class PlaylistComponent implements OnInit {
   // Downvote
   onSelectDownVote(song:Song) :void {
     var self = this;
+    this.checkVoted[song.artist][song.name] = true;    
     this.songService.downvoteSong(song).then(result=>{
       // Update song list
       self.getSongs(self.partyid);

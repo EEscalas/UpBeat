@@ -2,8 +2,8 @@ var upbeat = require('../controllers/upbeat.js');
 let path = require('path');
 module.exports = function(app) {
   app.get('/', upbeat.index);
-  app.post('/register', upbeat.register);
-  app.post('/login', upbeat.login);
+  // app.post('/register', upbeat.register);
+  // app.post('/login', upbeat.login);
   app.get('/parties', upbeat.getParties);
   app.post('/party/create', upbeat.createParty);
   app.get('/party/:partyid/delete', upbeat.deleteParty);

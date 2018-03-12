@@ -14,8 +14,8 @@
     <div class="song-details"><button *ngIf="isDj" (click)="onSelectDelete(song)">x</button></div>
   	<div class="song-details"> {{song.name}} by {{song.artist}} </div>
     <div class="song-details">{{song.upcount}}
-    	<button (click)="onSelectUpVote(song)">^</button>
-    	<button (click)="onSelectDownVote(song)">v</button>
+    	<button (click)="onSelectUpVote(song)" [disabled]="checkVoted[song.artist][song.name]">^</button>
+    	<button (click)="onSelectDownVote(song)" [disabled]="checkVoted[song.artist][song.name]">v</button>
     </div>
 	</li>
 	<p *ngIf="uniqueSong">Song has already been added</p>

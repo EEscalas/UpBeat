@@ -11,14 +11,6 @@ export class ApiService {
 
   constructor(private _http:Http) { }
 
-  registerUser(user: User){
-    return this._http.post('/register', user).map(data => data.json()).toPromise();
-  } 
-
-  login(info){
-    return this._http.post('/login', info).map(data=>data.json()).toPromise();
-  }
-
   createParty(party: Party){
     return this._http.post('/party/create', party).map(data=>data.json()).toPromise();
   }

@@ -1,19 +1,19 @@
 <h3>Create New Party</h3>
 
-<p *ngIf="checkUnique">Party name already exists</p>
+<p class="red" *ngIf="checkUnique">Party name already exists</p>
 <form (submit)="onSelectCreate()">
-    <label for="">
+    <div>
         <input id="partyName" name="name" #name="ngModel" [(ngModel)]="temp.name" placeholder="Party Name" required>
-        <span *ngIf='name.valid == false'>Party name is required</span>
-    </label>
-    <label for="">
+        <span class="red" *ngIf='name.valid == false'>Party name is required</span>
+    </div>
+    <div>
         <input id="accessKey" name="key" #key="ngModel" [(ngModel)]="temp.accessKey" placeholder="Access Key" minlength='3' required>
-        <span *ngIf='key.valid == false'>Access key must be at least 3 characters</span>
-    </label>
-    <label for="">
+        <span class="red" *ngIf='key.valid == false'>Access key must be at least 3 characters</span>
+    </div>
+    <div>
         <input id="password" name="pw" #pw="ngModel" [(ngModel)]="temp.password" placeholder="Password" minlength='3' required>
-        <span *ngIf='pw.valid == false'>Password must be at least 3 characters</span>
-    </label>
+        <span class="red" *ngIf='pw.valid == false'>Password must be at least 3 characters</span>
+    </div>
     <input type="submit" value='Create' [disabled]="!name.valid || !key.valid || !pw.valid">
 </form>
 
