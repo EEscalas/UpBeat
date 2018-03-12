@@ -130,6 +130,19 @@ module.exports = {
     })
   },
 
+  saveVoteCheck: function(req, res){
+    console.log("BODY");
+    console.log(req.body);
+    req.session.voteCheck = req.body;
+    res.json(req.session.voteCheck);
+  },
+
+  getVoteCheck: function(req, res){
+    console.log("WHY");
+    if(req.session.voteCheck == undefined)
+      req.session.voteCheck = {};
+    res.json(req.session.voteCheck);
+  }
   // register: function(req, res){
   //   // TODO: Hash password using bcrypt
   //     var user = new User(req.body);

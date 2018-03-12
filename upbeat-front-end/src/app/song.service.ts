@@ -30,4 +30,12 @@ export class SongService {
   downvoteSong(song: Song){
     return this._http.get('songs/downvote/'+song.partyid+'/'+song.name+'/'+song.artist).map(data=>data.json()).toPromise();
   }
+
+  getVoteCheck(){
+    return this._http.get('voteCheck').map(data=>data.json()).toPromise();
+  }
+
+  saveVoteCheck(checkVoted){
+    return this._http.post('voteCheck', checkVoted).map(data=>data.json()).toPromise();
+  }
 }

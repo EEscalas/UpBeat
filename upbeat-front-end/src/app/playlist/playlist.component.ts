@@ -26,6 +26,28 @@ export class PlaylistComponent implements OnInit {
   uniqueSong: boolean;
   emptySong: boolean;
   checkVoted;
+
+  // Initialize variables
+  ngOnInit() {
+    this.getVoteCheck();
+    this.tempSong = new Song();
+    this.uniqueSong = false;
+    this.emptySong = false;
+    this.getParties();
+    this.url = this.router.url;
+    if(this.url[1] == 'd')
+        this.isDj = true;
+    else
+        this.isDj = false;
+  }
+
+  // Get checkVoted from session on server side
+  getVoteCheck(){
+    this.songService.getVoteCheck().then(result =>{
+      this.checkVoted = result;
+    })
+  }
+
   // Use apiService to get parties and initialize party information
   getParties(){
     this.apiService.getParties().then(result=> {
@@ -49,51 +71,63 @@ export class PlaylistComponent implements OnInit {
   getSongs(partyid: number){
     this.songService.getSongs(partyid).then(result=>{
       this.songs = result;
-      console.log("BOOO");
-      console.log(result);
+
+      // Temp variable to keep track of songs in checkVoted that may have been deleted
+      var temp = {};
+      for(var key in this.checkVoted){
+        temp[key] = {};
+        for(var key2 in this.checkVoted[key])
+        {
+          temp[key][key2] = false;
+        }
+      }
+
+      // Add any new songs to checkVoted. Mark songs in temp.
       for(let i = 0; i < result.length; i++){
         if(this.checkVoted[result[i].artist] == undefined){
           this.checkVoted[result[i].artist] = {};
           this.checkVoted[result[i].artist][result[i].name] = false;
+          temp[result[i].artist] = {};
+          temp[result[i].artist][result[i].name] = true;
         }
         else if(this.checkVoted[result[i].artist][result[i].name] == undefined){
           this.checkVoted[result[i].artist][result[i].name] = false;
+          temp[result[i].artist][result[i].name] = true;
+        }
+        else
+          temp[result[i].artist][result[i].name] = true;
+      }
+
+      // Look for any unmarked songs in temp and delete keys from checkVoted
+      for(var key in temp){
+        for(var key2 in temp[key]){
+          if(!temp[key][key2])
+          {
+            delete this.checkVoted[key][key2];
+          }
+        }
+        if(Object.keys(this.checkVoted[key]).length == 0)
+        {
+          delete this.checkVoted[key];
         }
       }
 
-      console.log("AHHHHH");
-
-      console.log(this.checkVoted);
-      // Sort songs by number of upcounts
-      this.songs.sort((obj1:Song, obj2:Song) => {
-        if(obj1.upcount > obj2.upcount){
-          return -1;
-        }
-        if(obj1.upcount < obj2.upcount){
-          return 1;
-        }
-        return 0;
+      // Save checkVoted into session on server side
+      this.songService.saveVoteCheck(this.checkVoted).then(result =>{
+        // Sort songs by number of upcounts
+        this.songs.sort((obj1:Song, obj2:Song) => {
+          if(obj1.upcount > obj2.upcount){
+            return -1;
+          }
+          if(obj1.upcount < obj2.upcount){
+            return 1;
+          }
+          return 0;
+        })
       })
     })
   }
   
-  // Initialize parties list and dj status
-  ngOnInit() {
-    this.checkVoted = {};
-    this.tempSong = new Song();
-    this.uniqueSong = false;
-    this.emptySong = false;
-    this.getParties();
-    this.url = this.router.url;
-    if(this.url[1] == 'd')
-        this.isDj = true;
-    else
-        this.isDj = false;
-  }
-
-  // checkClicked(artist: string, name: string){
-  //   return this.checkVoted[artist][name];
-  // }
   // Delete songs
   deleteParty(){
     this.apiService.deleteParty(this.partyid).then(result=>{
@@ -110,47 +144,39 @@ export class PlaylistComponent implements OnInit {
     this.tempSong.name = (<HTMLInputElement>document.getElementById("song")).value;
     this.tempSong.partyid = this.partyid;
 
+    // Make sure input isn't empty
     if(this.tempSong.name == "" || this.tempSong.artist == ""){
       this.emptySong = true;
     }
     else{
-    // TODO: make sure song isn't a duplicate
       this.emptySong = false;
-    
+
+      // Check for duplicate song
       var self = this;
       this.songService.getSongs(this.partyid).then(songs => {
-        console.log("asdfasdfnlakjnfkan");
         var flag = false;
         for(let i = 0; i < songs.length; i++){
-          console.log(i);
-          console.log(songs[i].name);
-          console.log(this.tempSong.name);
           if(songs[i].name == this.tempSong.name && songs[i].artist == this.tempSong.artist){
             flag = true;
           }
         }
-        if(flag){
+        
+        if(flag){ // If song is a duplicate
           this.uniqueSong = true;
         }
         else{
           this.uniqueSong = false;
+          // If not duplicate, add song
           self.songService.addSong(this.tempSong).then(result=>{
             // Update song list
             self.getSongs(self.partyid);
+
+            // Reset model for songs
             self.tempSong = new Song();
           });
         }
       });
     }
-
-    // Send song to database
-    // var self = this;
-    // this.songService.addSong(this.tempSong).then(result=>{
-    //   // Update song list
-    //   self.getSongs(self.partyid);
-    // });
-
-
    }
 
   //  Delete song from database

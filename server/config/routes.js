@@ -12,6 +12,8 @@ module.exports = function(app) {
   app.get('/songs/delete/:partyid/:name/:artist', upbeat.deleteSong);
   app.get('/songs/upvote/:partyid/:name/:artist', upbeat.upvoteSong);
   app.get('/songs/downvote/:partyid/:name/:artist', upbeat.downvoteSong);
+  app.get('/voteCheck', upbeat.getVoteCheck);
+  app.post('/voteCheck', upbeat.saveVoteCheck);
   // app.get('/:partyid/people', upbeat.getPartyPeople);
   app.all("*", (req,res,next) => {
     var ngName = "upbeat-front-end";
