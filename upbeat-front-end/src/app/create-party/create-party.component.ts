@@ -18,9 +18,12 @@ export class CreatePartyComponent implements OnInit {
   partyAccessKey: string;
   existingParties: Party[];
   temp: Party;
+  checkUnique: boolean;
 
   ngOnInit() {
     // Initialize parties
+    this.temp = new Party();
+    this.checkUnique = false;
     this.getParties();
   }
 
@@ -44,14 +47,37 @@ export class CreatePartyComponent implements OnInit {
     this.temp.accessKey = this.partyAccessKey;
 
     // Use apiService to create party in database
-    this.apiService.createParty(this.temp).then(result => {
-      if(result != 'err')
-      {
-        this.router.navigateByUrl('/dj/' + this.partyName + '/' + result.id);
+    var self = this;
+    this.apiService.getParties().then(parties =>{
+      var flag = false;
+      for(let i = 0; i < parties.length; i++){
+        if(parties[i].name == this.partyName){
+          flag = true;
+        }
       }
-      else
-        console.log('err');
+
+      if(flag){
+        this.checkUnique = true;
+      }
+      else{
+        self.apiService.createParty(this.temp).then(result => {
+          if(result != 'err')
+          {
+            this.router.navigateByUrl('/dj/' + this.partyName + '/' + result.id);
+          }
+          else
+            console.log('err');
+        });
+      }
     });
+    // this.apiService.createParty(this.temp).then(result => {
+    //   if(result != 'err')
+    //   {
+    //     this.router.navigateByUrl('/dj/' + this.partyName + '/' + result.id);
+    //   }
+    //   else
+    //     console.log('err');
+    // });
 
   }
 

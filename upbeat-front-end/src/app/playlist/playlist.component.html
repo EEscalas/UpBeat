@@ -8,6 +8,7 @@
 </style>
 <h2>Party: {{partyName}}</h2>
 <h3>Access Key: {{accessKey}}</h3>
+<button *ngIf="isDj" (click)="deleteParty()">Delete Party</button>
 <ul class="songs">
   <li *ngFor="let song of songs">
     <div class="song-details"><button *ngIf="isDj" (click)="onSelectDelete(song)">x</button></div>
@@ -17,9 +18,16 @@
     	<button (click)="onSelectDownVote(song)">v</button>
     </div>
 	</li>
-	<div>
-		<input id="song" placeholder="Song Name">
-		<input id="artist" placeholder="Artist">
-		<button (click)="onAddSong()">Add</button>
-	</div>
+	<p *ngIf="uniqueSong">Song has already been added</p>
+	<p *ngIf="emptySong">Song name and artist required</p>
+	<form (submit)="onAddSong()">
+		<label for="">
+			<input id="song" name="songName" [(ngModel)]="tempSong.name" placeholder="Song Name">
+		</label>
+		<label for="">
+		<input id="artist" name="songArtist" [(ngModel)]="tempSong.artist" placeholder="Artist">
+		</label>
+		
+		<input type="submit" value="Add">
+	</form>
 </ul>

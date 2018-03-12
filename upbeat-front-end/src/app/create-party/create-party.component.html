@@ -1,8 +1,21 @@
 <h3>Create New Party</h3>
-<input id="partyName" placeholder="Party Name">
-<input id="accessKey" placeholder="Access Key">
-<input id="password" placeholder="Password">
-<button (click)="onSelectCreate()">Create</button>
+
+<p *ngIf="checkUnique">Party name already exists</p>
+<form (submit)="onSelectCreate()">
+    <label for="">
+        <input id="partyName" name="name" #name="ngModel" [(ngModel)]="temp.name" placeholder="Party Name" required>
+        <span *ngIf='name.valid == false'>Party name is required</span>
+    </label>
+    <label for="">
+        <input id="accessKey" name="key" #key="ngModel" [(ngModel)]="temp.accessKey" placeholder="Access Key" minlength='3' required>
+        <span *ngIf='key.valid == false'>Access key must be at least 3 characters</span>
+    </label>
+    <label for="">
+        <input id="password" name="pw" #pw="ngModel" [(ngModel)]="temp.password" placeholder="Password" minlength='3' required>
+        <span *ngIf='pw.valid == false'>Password must be at least 3 characters</span>
+    </label>
+    <input type="submit" value='Create' [disabled]="!name.valid || !key.valid || !pw.valid">
+</form>
 
 <h3>DJ Existing Party</h3>
 <input id="existingPartyName" placeholder="Party Name">

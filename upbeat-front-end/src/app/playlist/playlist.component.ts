@@ -23,7 +23,8 @@ export class PlaylistComponent implements OnInit {
   tempSong: Song;
   accessKey: string;
   existingParties: Party[];
-
+  uniqueSong: boolean;
+  emptySong: boolean;
   // Use apiService to get parties and initialize party information
   getParties(){
     this.apiService.getParties().then(result=> {
@@ -47,7 +48,7 @@ export class PlaylistComponent implements OnInit {
   getSongs(partyid: number){
     this.songService.getSongs(partyid).then(result=>{
       this.songs = result;
-
+  
       // Sort songs by number of upcounts
       this.songs.sort((obj1:Song, obj2:Song) => {
         if(obj1.upcount > obj2.upcount){
@@ -63,12 +64,23 @@ export class PlaylistComponent implements OnInit {
   
   // Initialize parties list and dj status
   ngOnInit() {
+    this.tempSong = new Song();
+    this.uniqueSong = false;
+    this.emptySong = false;
     this.getParties();
     this.url = this.router.url;
     if(this.url[1] == 'd')
         this.isDj = true;
     else
         this.isDj = false;
+  }
+
+  // Delete songs
+  deleteParty(){
+    this.apiService.deleteParty(this.partyid).then(result=>{
+      if(result == true)
+        this.router.navigateByUrl('/');
+    });
   }
 
   // Use songService to add song to database
@@ -79,14 +91,45 @@ export class PlaylistComponent implements OnInit {
     this.tempSong.name = (<HTMLInputElement>document.getElementById("song")).value;
     this.tempSong.partyid = this.partyid;
 
+    if(this.tempSong.name == "" || this.tempSong.artist == ""){
+      this.emptySong = true;
+    }
+    else{
     // TODO: make sure song isn't a duplicate
+      this.emptySong = false;
+    
+      var self = this;
+      this.songService.getSongs(this.partyid).then(songs => {
+        console.log("asdfasdfnlakjnfkan");
+        var flag = false;
+        for(let i = 0; i < songs.length; i++){
+          console.log(i);
+          console.log(songs[i].name);
+          console.log(this.tempSong.name);
+          if(songs[i].name == this.tempSong.name && songs[i].artist == this.tempSong.artist){
+            flag = true;
+          }
+        }
+        if(flag){
+          this.uniqueSong = true;
+        }
+        else{
+          this.uniqueSong = false;
+          self.songService.addSong(this.tempSong).then(result=>{
+            // Update song list
+            self.getSongs(self.partyid);
+            self.tempSong = new Song();
+          });
+        }
+      });
+    }
 
     // Send song to database
-    var self = this;
-    this.songService.addSong(this.tempSong).then(result=>{
-      // Update song list
-      self.getSongs(self.partyid);
-    });
+    // var self = this;
+    // this.songService.addSong(this.tempSong).then(result=>{
+    //   // Update song list
+    //   self.getSongs(self.partyid);
+    // });
 
 
    }
