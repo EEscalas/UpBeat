@@ -1,0 +1,11 @@
+.linkLogo {
+    height: 200px;
+    float: middle;
+    padding: 30px;
+}
+
+.center {
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+}
