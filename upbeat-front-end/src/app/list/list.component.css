@@ -1,16 +1,28 @@
-#link {
-  color: #888;
-  text-decoration: none;
-  position: inline;
-  display: block;
-  width: 250px;
+.link {
+  background-color: #AC4FC6;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
 }
 
+.link:hover {
+  background-color: #6c337c;
+}
 
-.link {
-  color: #888;
-  text-decoration: none;
-  position: inline;
-  display: block;
-  width: 250px;
+.header {
+  background: black;
+}
+
+.taskbar {
+  background: #AC4FC6;
+}
+
+.logo {
+  height: 100px; 
+  padding: 15px;
 }
