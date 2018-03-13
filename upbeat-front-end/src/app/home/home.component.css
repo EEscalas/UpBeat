@@ -1,7 +1,8 @@
 .linkLogo {
-    height: 200px;
     float: middle;
     padding: 30px;
+    text-align:center;
+    height: 200px;
 }
 
 .center {

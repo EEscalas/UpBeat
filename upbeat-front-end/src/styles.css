@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+.logo{
+	text-align:center;
+	min-width: 320px;
+	max-width: 320px;
+	min-height: 80px;
+	max-width: 80px;
+}
+html{
+	font-family:Verdana, Geneva, sans-serif;
+}
+
+@media(max-width: 480px){
+	html{
+		font-size: 10px;
+	}
+}
