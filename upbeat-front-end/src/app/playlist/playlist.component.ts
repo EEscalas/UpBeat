@@ -76,29 +76,33 @@ export class PlaylistComponent implements OnInit {
     this.songService.getSongs(partyid).then(result=>{
       this.songs = result;
 
+      if(this.checkUpVoted[this.partyid] == undefined)
+        this.checkUpVoted[this.partyid] = {};
+      if(this.checkDownVoted[this.partyid] == undefined)
+        this.checkDownVoted[this.partyid] = {};
       // Temp variable to keep track of songs in checkVoted that may have been deleted
       var temp1 = {};
-      for(var key in this.checkUpVoted){
+      for(var key in this.checkUpVoted[this.partyid]){
         temp1[key] = {};
-        for(var key2 in this.checkUpVoted[key])
+        for(var key2 in this.checkUpVoted[this.partyid][key])
         {
           temp1[key][key2] = false;
         }
       }
 
-      // Add any new songs to checkUpVoted and checkDownVoted. Mark songs in temp1.
+      // Add any new songs to checkUpVoted[this.partyid] and checkDownVoted[this.partyid]. Mark songs in temp1.
       for(let i = 0; i < result.length; i++){
-        if(this.checkUpVoted[result[i].artist] == undefined){
-          this.checkUpVoted[result[i].artist] = {};
-          this.checkUpVoted[result[i].artist][result[i].name] = false;
-          this.checkDownVoted[result[i].artist] = {};
-          this.checkDownVoted[result[i].artist][result[i].name] = false;
+        if(this.checkUpVoted[this.partyid][result[i].artist] == undefined){
+          this.checkUpVoted[this.partyid][result[i].artist] = {};
+          this.checkUpVoted[this.partyid][result[i].artist][result[i].name] = false;
+          this.checkDownVoted[this.partyid][result[i].artist] = {};
+          this.checkDownVoted[this.partyid][result[i].artist][result[i].name] = false;
           temp1[result[i].artist] = {};
           temp1[result[i].artist][result[i].name] = true;
         }
-        else if(this.checkUpVoted[result[i].artist][result[i].name] == undefined){
-          this.checkUpVoted[result[i].artist][result[i].name] = false;
-          this.checkDownVoted[result[i].artist][result[i].name] = false;
+        else if(this.checkUpVoted[this.partyid][result[i].artist][result[i].name] == undefined){
+          this.checkUpVoted[this.partyid][result[i].artist][result[i].name] = false;
+          this.checkDownVoted[this.partyid][result[i].artist][result[i].name] = false;
           temp1[result[i].artist][result[i].name] = true;
         }
         else{
@@ -106,26 +110,27 @@ export class PlaylistComponent implements OnInit {
         }
       }
 
-      // Look for any unmarked songs in temp1 and delete keys from checkUpVoted
+      // Look for any unmarked songs in temp1 and delete keys from checkUpVoted[this.partyid]
       for(var key in temp1){
         for(var key2 in temp1[key]){
           if(!temp1[key][key2])
           {
-            delete this.checkUpVoted[key][key2];
-            delete this.checkDownVoted[key][key2];
+            delete this.checkUpVoted[this.partyid][key][key2];
+            delete this.checkDownVoted[this.partyid][key][key2];
           }
         }
-        if(Object.keys(this.checkUpVoted[key]).length == 0)
+        if(Object.keys(this.checkUpVoted[this.partyid][key]).length == 0)
         {
-          delete this.checkUpVoted[key];
-          delete this.checkDownVoted[key];
+          delete this.checkUpVoted[this.partyid][key];
+          delete this.checkDownVoted[this.partyid][key];
         }
       }
 
-      // Save checkUpVoted into session on server side
+      // Save checkUpVoted[this.partyid] into session on server side
       this.songService.saveUpVoteCheck(this.checkUpVoted).then(result =>{
-        // Sort songs by number of upcounts
-        this.songService.saveUpVoteCheck(this.checkUpVoted).then(result2 => {
+        // Save checkDownVoted[this.partyid] into session on server side
+        this.songService.saveDownVoteCheck(this.checkDownVoted).then(result2 => {
+          // Sort songs by number of upcounts
           this.songs.sort((obj1:Song, obj2:Song) => {
             if(obj1.upcount > obj2.upcount){
               return -1;
@@ -203,21 +208,52 @@ export class PlaylistComponent implements OnInit {
   // Upvote
   onSelectUpVote(song:Song) :void {
     var self = this;
-    this.checkUpVoted[song.artist][song.name] = true;
-    this.songService.upvoteSong(song).then(result=>{
-      // Update song list
-      self.getSongs(self.partyid);
-    });
+
+    if(this.checkUpVoted[this.partyid][song.artist][song.name] == false){
+      this.checkUpVoted[this.partyid][song.artist][song.name] = true;
+      this.songService.upvoteSong(song).then(result=>{
+        // If changing from downvote to upvote
+        if(this.checkDownVoted[this.partyid][song.artist][song.name]){
+          this.checkDownVoted[this.partyid][song.artist][song.name] = false;
+          // Upvote twice
+          this.songService.upvoteSong(song).then(result2 => {
+            self.getSongs(self.partyid);
+          });
+        }
+        else
+          self.getSongs(self.partyid);
+      });
+    }
+    else{
+      this.checkUpVoted[this.partyid][song.artist][song.name] = false;
+      this.songService.downvoteSong(song).then(result=>{
+        this.getSongs(this.partyid);
+      })
+    }
   }
 
   // Downvote
   onSelectDownVote(song:Song) :void {
     var self = this;
-    this.checkUpVoted[song.artist][song.name] = true;    
-    this.songService.downvoteSong(song).then(result=>{
-      // Update song list
-      self.getSongs(self.partyid);
-    });
+    if(this.checkDownVoted[this.partyid][song.artist][song.name] == false){
+      this.checkDownVoted[this.partyid][song.artist][song.name] = true;    
+      this.songService.downvoteSong(song).then(result=>{
+        if(this.checkUpVoted[this.partyid][song.artist][song.name]){
+          this.checkUpVoted[this.partyid][song.artist][song.name] = false;
+          this.songService.downvoteSong(song).then(result2 => {
+            self.getSongs(self.partyid);
+          })
+        }
+        else
+          self.getSongs(self.partyid);
+      });
+    }
+    else{
+      this.checkDownVoted[this.partyid][song.artist][song.name] = false;    
+      this.songService.upvoteSong(song).then(result=>{
+        this.getSongs(this.partyid);
+      })
+    }
   }
 
 }

@@ -10,14 +10,19 @@
 <h3>Access Key: {{accessKey}}</h3>
 <button *ngIf="isDj" (click)="deleteParty()">Delete Party</button>
 <ul class="songs">
+	<div style="display: inline-block; margin-right: auto; margin-left: auto; text-align: center;">
   <li *ngFor="let song of songs">
-    <div class="song-details"><button *ngIf="isDj" (click)="onSelectDelete(song)">x</button></div>
+   	<div class="song-details"><img src="https://image.ibb.co/jpaovH/Upbeat_Delete.png" *ngIf="isDj" (click)="onSelectDelete(song)"></div>
   	<div class="song-details"> {{song.name}} by {{song.artist}} </div>
-    <div class="song-details">{{song.upcount}}
-    	<button (click)="onSelectUpVote(song)" [disabled]="checkVoted[song.artist][song.name]">^</button>
-    	<button (click)="onSelectDownVote(song)" [disabled]="checkVoted[song.artist][song.name]">v</button>
-    </div>
+		<div class="song-details"><b style="padding-left: 15px;">{{song.upcount}}</b>
+    			<button style="padding-left: 5px;" id="iconUp" (click)="onSelectUpVote(song)" *ngIf="!checkUpVoted[partyid][song.artist][song.name]"></button>
+    			<button style="padding-left: 5px;" id="iconUpD" (click)="onSelectUpVote(song)" *ngIf="checkUpVoted[partyid][song.artist][song.name]"></button>
+    			<button id="iconDown" (click)="onSelectDownVote(song)" *ngIf="!checkDownVoted[partyid][song.artist][song.name]"></button>
+    			<button id="iconDownD" (click)="onSelectDownVote(song)" *ngIf="checkDownVoted[partyid][song.artist][song.name]"></button>
+		</div>
 	</li>
+	</div>
+	<br>
 	<p *ngIf="uniqueSong">Song has already been added</p>
 	<p *ngIf="emptySong">Song name and artist required</p>
 	<form (submit)="onAddSong()">

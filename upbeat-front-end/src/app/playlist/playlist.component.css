@@ -31,6 +31,31 @@ img {
     min-width: 10px;
 }
 
+#iconUpD {
+    background-image: url( 'https://image.ibb.co/j5ENqH/Upbeat_Up_Arrow_Disabled.png' );
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+    background-size: 20px 20px;
+    border: none;
+    background-color: white;
+    box-shadow: none;
+    cursor: pointer;
+    min-width: 10px;
+}
+#iconDownD {
+    background-image: url( 'https://image.ibb.co/nu9cPc/Upbeat_Down_Arrow_Disabled.png' );
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+    border: none;
+    background-size: 20px 20px;
+    background-color: white;
+    box-shadow: none;
+    cursor: pointer;
+    min-width: 10px;
+}
+
 li {
     padding: 10px;
     border: black;

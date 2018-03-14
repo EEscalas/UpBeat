@@ -20,8 +20,6 @@ export class PartyListComponent implements OnInit {
     })
   }
   onSelectParty(name, id) : void {
-    console.log(id);
-    console.log(name);
     this.router.navigateByUrl('/guest/' + name + '/' + id + '/password');
   }
 

@@ -52,8 +52,15 @@ module.exports = {
         newParty.save(function(err){
           if(err)
             res.json('err');
-          else
+          else{
+            if(req.session.upvoteCheck == undefined)
+              req.session.upvoteCheck = {};
+            if(req.session.downvoteCheck == undefined)
+              req.session.downvoteCheck = {};
+            req.session.upvoteCheck[id] = {};
+            req.session.downvoteCheck[id] = {};
             res.json(newParty);
+          }
         })
         
       })
@@ -67,8 +74,11 @@ module.exports = {
           Song.remove({partyid: req.params.partyid}, function(err2){
             if(err2)
               res.json(err2);
-            else
+            else{
+              delete req.session.upvoteCheck[id];
+              delete req.session.downvoteCheck[id];
               res.json(true);
+            }
           })
         }
     })
@@ -133,7 +143,7 @@ module.exports = {
   },
 
   saveUpVoteCheck: function(req, res){
-    req.session.voteCheck = req.body;
+    req.session.upvoteCheck = req.body;
     res.json(req.session.upvoteCheck);
   },
 

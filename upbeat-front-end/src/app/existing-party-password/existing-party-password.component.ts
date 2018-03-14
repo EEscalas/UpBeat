@@ -42,7 +42,6 @@ export class ExistingPartyPasswordComponent implements OnInit {
   onSelectButton(name,id):void{
   	//check password
     let passCheck :boolean = false;
-    console.log(this.partyAccessKey);
     if((<HTMLInputElement>document.getElementById("accessKey")).value == this.partyAccessKey){
       passCheck = true;
     }
