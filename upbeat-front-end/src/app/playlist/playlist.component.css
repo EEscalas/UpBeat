@@ -3,6 +3,7 @@ img {
     width: 20px;
     padding-right: 5px;
     cursor: pointer;
+    min-width: 10px;
 }
 
 #iconUp {
@@ -15,6 +16,7 @@ img {
     background-color: white;
     box-shadow: none;
     cursor: pointer;
+    min-width: 10px;
 }
 #iconDown {
     background-image: url( 'https://image.ibb.co/b118ec/Upbeat_Down_Arrow.png' );
@@ -26,6 +28,7 @@ img {
     background-color: white;
     box-shadow: none;
     cursor: pointer;
+    min-width: 10px;
 }
 
 li {
