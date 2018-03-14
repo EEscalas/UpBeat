@@ -25,7 +25,8 @@ export class PlaylistComponent implements OnInit {
   existingParties: Party[];
   uniqueSong: boolean;
   emptySong: boolean;
-  checkVoted;
+  checkUpVoted;
+  checkDownVoted;
 
   // Initialize variables
   ngOnInit() {
@@ -43,8 +44,11 @@ export class PlaylistComponent implements OnInit {
 
   // Get checkVoted from session on server side
   getVoteCheck(){
-    this.songService.getVoteCheck().then(result =>{
-      this.checkVoted = result;
+    this.songService.getUpVoteCheck().then(result1 =>{
+      this.checkUpVoted = result1;
+      this.songService.getDownVoteCheck().then(result2 => {
+        this.checkDownVoted = result2;
+      })
     })
   }
 
@@ -73,56 +77,64 @@ export class PlaylistComponent implements OnInit {
       this.songs = result;
 
       // Temp variable to keep track of songs in checkVoted that may have been deleted
-      var temp = {};
-      for(var key in this.checkVoted){
-        temp[key] = {};
-        for(var key2 in this.checkVoted[key])
+      var temp1 = {};
+      for(var key in this.checkUpVoted){
+        temp1[key] = {};
+        for(var key2 in this.checkUpVoted[key])
         {
-          temp[key][key2] = false;
+          temp1[key][key2] = false;
         }
       }
 
-      // Add any new songs to checkVoted. Mark songs in temp.
+      // Add any new songs to checkUpVoted and checkDownVoted. Mark songs in temp1.
       for(let i = 0; i < result.length; i++){
-        if(this.checkVoted[result[i].artist] == undefined){
-          this.checkVoted[result[i].artist] = {};
-          this.checkVoted[result[i].artist][result[i].name] = false;
-          temp[result[i].artist] = {};
-          temp[result[i].artist][result[i].name] = true;
+        if(this.checkUpVoted[result[i].artist] == undefined){
+          this.checkUpVoted[result[i].artist] = {};
+          this.checkUpVoted[result[i].artist][result[i].name] = false;
+          this.checkDownVoted[result[i].artist] = {};
+          this.checkDownVoted[result[i].artist][result[i].name] = false;
+          temp1[result[i].artist] = {};
+          temp1[result[i].artist][result[i].name] = true;
         }
-        else if(this.checkVoted[result[i].artist][result[i].name] == undefined){
-          this.checkVoted[result[i].artist][result[i].name] = false;
-          temp[result[i].artist][result[i].name] = true;
+        else if(this.checkUpVoted[result[i].artist][result[i].name] == undefined){
+          this.checkUpVoted[result[i].artist][result[i].name] = false;
+          this.checkDownVoted[result[i].artist][result[i].name] = false;
+          temp1[result[i].artist][result[i].name] = true;
         }
-        else
-          temp[result[i].artist][result[i].name] = true;
+        else{
+          temp1[result[i].artist][result[i].name] = true;
+        }
       }
 
-      // Look for any unmarked songs in temp and delete keys from checkVoted
-      for(var key in temp){
-        for(var key2 in temp[key]){
-          if(!temp[key][key2])
+      // Look for any unmarked songs in temp1 and delete keys from checkUpVoted
+      for(var key in temp1){
+        for(var key2 in temp1[key]){
+          if(!temp1[key][key2])
           {
-            delete this.checkVoted[key][key2];
+            delete this.checkUpVoted[key][key2];
+            delete this.checkDownVoted[key][key2];
           }
         }
-        if(Object.keys(this.checkVoted[key]).length == 0)
+        if(Object.keys(this.checkUpVoted[key]).length == 0)
         {
-          delete this.checkVoted[key];
+          delete this.checkUpVoted[key];
+          delete this.checkDownVoted[key];
         }
       }
 
-      // Save checkVoted into session on server side
-      this.songService.saveVoteCheck(this.checkVoted).then(result =>{
+      // Save checkUpVoted into session on server side
+      this.songService.saveUpVoteCheck(this.checkUpVoted).then(result =>{
         // Sort songs by number of upcounts
-        this.songs.sort((obj1:Song, obj2:Song) => {
-          if(obj1.upcount > obj2.upcount){
-            return -1;
-          }
-          if(obj1.upcount < obj2.upcount){
-            return 1;
-          }
-          return 0;
+        this.songService.saveUpVoteCheck(this.checkUpVoted).then(result2 => {
+          this.songs.sort((obj1:Song, obj2:Song) => {
+            if(obj1.upcount > obj2.upcount){
+              return -1;
+            }
+            if(obj1.upcount < obj2.upcount){
+              return 1;
+            }
+            return 0;
+          })
         })
       })
     })
@@ -191,7 +203,7 @@ export class PlaylistComponent implements OnInit {
   // Upvote
   onSelectUpVote(song:Song) :void {
     var self = this;
-    this.checkVoted[song.artist][song.name] = true;
+    this.checkUpVoted[song.artist][song.name] = true;
     this.songService.upvoteSong(song).then(result=>{
       // Update song list
       self.getSongs(self.partyid);
@@ -201,7 +213,7 @@ export class PlaylistComponent implements OnInit {
   // Downvote
   onSelectDownVote(song:Song) :void {
     var self = this;
-    this.checkVoted[song.artist][song.name] = true;    
+    this.checkUpVoted[song.artist][song.name] = true;    
     this.songService.downvoteSong(song).then(result=>{
       // Update song list
       self.getSongs(self.partyid);

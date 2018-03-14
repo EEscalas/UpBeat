@@ -34,11 +34,13 @@ module.exports = {
 
   createParty: function(req, res){
       Party.find({}).sort('-createdAt').exec(function(err, parties){
+
+        console.log(parties);
         var id = 0;
         if(parties.length == 0)
           id = 1;
         else
-          id = parties[0].id+1;
+          id = parties[parties.length-1].id+1;
 
         req.body.id = id;
 
@@ -130,18 +132,26 @@ module.exports = {
     })
   },
 
-  saveVoteCheck: function(req, res){
-    console.log("BODY");
-    console.log(req.body);
+  saveUpVoteCheck: function(req, res){
     req.session.voteCheck = req.body;
-    res.json(req.session.voteCheck);
+    res.json(req.session.upvoteCheck);
   },
 
-  getVoteCheck: function(req, res){
-    console.log("WHY");
-    if(req.session.voteCheck == undefined)
-      req.session.voteCheck = {};
-    res.json(req.session.voteCheck);
+  getUpVoteCheck: function(req, res){
+    if(req.session.upvoteCheck == undefined)
+      req.session.upvoteCheck = {};
+    res.json(req.session.upvoteCheck);
+  },
+
+  saveDownVoteCheck: function(req, res){
+    req.session.downvoteCheck = req.body;
+    res.json(req.session.downvoteCheck);
+  },
+
+  getDownVoteCheck: function(req, res){
+    if(req.session.downvoteCheck == undefined)
+      req.session.downvoteCheck = {};
+    res.json(req.session.downvoteCheck);
   }
   // register: function(req, res){
   //   // TODO: Hash password using bcrypt

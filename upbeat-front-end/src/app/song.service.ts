@@ -31,11 +31,19 @@ export class SongService {
     return this._http.get('songs/downvote/'+song.partyid+'/'+song.name+'/'+song.artist).map(data=>data.json()).toPromise();
   }
 
-  getVoteCheck(){
-    return this._http.get('voteCheck').map(data=>data.json()).toPromise();
+  getUpVoteCheck(){
+    return this._http.get('upvoteCheck').map(data=>data.json()).toPromise();
   }
 
-  saveVoteCheck(checkVoted){
-    return this._http.post('voteCheck', checkVoted).map(data=>data.json()).toPromise();
+  getDownVoteCheck(){
+    return this._http.get('downvoteCheck').map(data=>data.json()).toPromise();
+  }
+
+  saveUpVoteCheck(checkVoted){
+    return this._http.post('upvoteCheck', checkVoted).map(data=>data.json()).toPromise();
+  }
+
+  saveDownVoteCheck(checkVoted){
+    return this._http.post('downvoteCheck', checkVoted).map(data=>data.json()).toPromise();
   }
 }
