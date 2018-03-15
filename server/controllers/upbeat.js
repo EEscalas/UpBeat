@@ -75,8 +75,8 @@ module.exports = {
             if(err2)
               res.json(err2);
             else{
-              delete req.session.upvoteCheck[id];
-              delete req.session.downvoteCheck[id];
+              delete req.session.upvoteCheck[req.params.partyid];
+              delete req.session.downvoteCheck[req.params.partyid];
               res.json(true);
             }
           })
